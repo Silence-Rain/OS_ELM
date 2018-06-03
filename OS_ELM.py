@@ -93,14 +93,14 @@ class OS_ELM(object):
 		# 计算输出权重
 		self.beta = self.M * H0.T * T0
 
-		# # 训练准确率不足80%或测试准确率不足70%，则重新训练
-		# train_err = self.error_calc(train_set, text="%s训练" % self.id)
-		# test_err = self.error_calc(test_set, text="%s测试" % self.id)
-		# if train_err < 0.80 or test_err < 0.70:
-		# 	self.clear()
-		# 	return False
-		# else:
-		# 	return self
+		# 训练准确率不足80%或测试准确率不足70%，则重新训练
+		train_err = self.error_calc(train_set, text="%s训练" % self.id)
+		test_err = self.error_calc(test_set, text="%s测试" % self.id)
+		if train_err < 0.80 or test_err < 0.70:
+			self.clear()
+			return False
+		else:
+			return self
 
 	# 使用在线数据更新网络
 	# 参数：在线训练数据（np.array），label列的下标（默认为0）
@@ -152,8 +152,8 @@ class OS_ELM(object):
 		return res
 
 	# 计算训练的误差值
-	# 参数：训练数据，label列的下标（默认为0）
-	def error_calc(self, data, label_index=0, text=""):
+	# 参数：训练数据，label列的下标（默认为0），输出内容的附加文本（默认为模型id）
+	def error_calc(self, data, label_index=0, text=self.id):
 		correct = 0
 		sum = 0
 		for row in data:
