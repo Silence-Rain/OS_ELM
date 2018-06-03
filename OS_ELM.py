@@ -3,9 +3,9 @@
 import numpy as np
 
 # 在线顺序极限学习机
-# 构造参数：模型id（用于在输出中标识不同的模型，默认为空），隐层节点数，输入节点数，归一化方法（默认0-1归一化）
+# 构造参数：隐层节点数，输入节点数，模型id（用于在输出中标识不同的模型，默认为空），归一化方法（默认0-1归一化）
 class OS_ELM(object):
-	def __init__(self, id="", hidden_neuron, input_neuron, norm="0-1"):
+	def __init__(self, hidden_neuron, input_neuron, id="", norm="0-1"):
 		self.num_hidden_neurons = hidden_neuron
 		self.num_input_neurons = input_neuron
 		self.id = id
@@ -101,6 +101,7 @@ class OS_ELM(object):
 			return False
 		else:
 			return self
+		# return self
 
 	# 使用在线数据更新网络
 	# 参数：在线训练数据（np.array），label列的下标（默认为0）
@@ -137,7 +138,7 @@ class OS_ELM(object):
 		res = []
 		# 归一化数据
 		if self.norm == "0-1":
-			data = self.normalize(data, label_index)
+			data = self.normalize(data)
 		for row in data:
 			# 处理特征
 			matrix = []
@@ -153,7 +154,10 @@ class OS_ELM(object):
 
 	# 计算训练的误差值
 	# 参数：训练数据，label列的下标（默认为0），输出内容的附加文本（默认为模型id）
-	def error_calc(self, data, label_index=0, text=self.id):
+	def error_calc(self, data, label_index=0, text=""):
+		# 附加文本默认为模型id
+		if len(text) == 0:
+			test = self.id
 		correct = 0
 		sum = 0
 		for row in data:
@@ -175,7 +179,7 @@ class OS_ELM(object):
 
 if __name__ == '__main__':
 	raw=np.loadtxt(open("data/trainData1111.csv","r"),delimiter=",",skiprows=0)
-	elm = OS_ELM(hidden_neuron=60, input_neuron=4, id="local_detection")
+	elm = OS_ELM(hidden_neuron=60, input_neuron=4, id="local_detection", norm="no")
 	network = elm.fit_init(data=raw)
 	while not network:
 		np.random.shuffle(raw)
