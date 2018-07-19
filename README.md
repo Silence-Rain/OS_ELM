@@ -2,18 +2,45 @@
 
 Python3 implementation of Online Sequential Extreme Learning Machine
 
-### Requirements
+#### Requirements
 
 - Python ^3.6.3
 - numpy ^1.14.2
 
-### Features
+#### Features
 
-- Automatically calculate the range of labels according to the given data. 
-- Calculate the training error rate.
+- Provides normalization in the model (**Only 0-1 normalization provided currently**). 
+- Automatically calculates the range of labels according to the given data. No extra parameter needed for normalization.
+- Calculates the training error rate.
 
-### Functions
+#### APIs
 
-- fit_init()
-- fit_train()
-- predict()
+- **fit_init()**
+  Initial training.
+
+  | parameters/return value | type     | description                           |
+  | ----------------------- | -------- | ------------------------------------- |
+  | data                    | np.array | train set                             |
+  | label_index             | int      | the index of label column (default 0) |
+  | return                  | OS_ELM   | trained network                       |
+
+- **fit_train()**
+
+  Update the network using online data.
+
+  | parameters/return value | type     | description                               |
+  | ----------------------- | -------- | ----------------------------------------- |
+  | data                    | np.array | online train set (**1 record each time**) |
+  | label_index             | int      | the index of label column (default 0)     |
+  | return                  | OS_ELM   | updated network                           |
+
+- **predict()**
+
+  Predict labels using current network.
+
+  | parameters/return value | type     | description      |
+  | ----------------------- | -------- | ---------------- |
+  | data                    | np.array | test set         |
+  | return                  | list     | predicted labels |
+
+  
