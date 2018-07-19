@@ -3,8 +3,12 @@
 import numpy as np
 
 # 在线顺序极限学习机
-# 构造参数：隐层节点数，输入节点数，模型id（用于在输出中标识不同的模型，默认为空），归一化方法（默认0-1归一化）
+# 构造参数：，，，
 class OS_ELM(object):
+	# @param hidden_neuron {int} 隐层节点数
+	# @param input_neuron {int} 输入节点数
+	# @param id {string} 模型id，用于在输出中标识不同的模型
+	# @param norm {string} 归一化方法（可选值："no", "0-1"）
 	def __init__(self, hidden_neuron, input_neuron, id="", norm="0-1"):
 		self.num_hidden_neurons = hidden_neuron
 		self.num_input_neurons = input_neuron
@@ -27,7 +31,7 @@ class OS_ELM(object):
 
 	# 使用0-1归一化，处理除label以外所有列的数据
 	# @param data {np.array} 初始训练数据
-	# @param label_index {int} label列的下标（默认为-1，无下标）
+	# @param label_index {int} label列的下标，默认为-1（无下标）
 	def normalize(self, data, label_index=-1):
 		for ind in range(1,len(data[0])):
 			if ind != label_index:
@@ -61,7 +65,7 @@ class OS_ELM(object):
 
 	# 使用初始数据训练网络
 	# @param data {np.array} 初始训练数据
-	# @param label_index {int} label列的下标（默认为0）
+	# @param label_index {int} label列的下标
 	# @return {OS_ELM} 训练后的网络
 	def fit_init(self, data, label_index=0):
 		label = []
@@ -70,6 +74,8 @@ class OS_ELM(object):
 		if self.norm == "0-1":
 			data = self.normalize(data, label_index)
 		data_size = len(data)
+		# 打乱训练集顺序
+		np.random.shuffle(data)
 		for row in data:
 			# 记录样本label
 			temp = []
@@ -100,7 +106,7 @@ class OS_ELM(object):
 
 	# 使用在线数据更新网络
 	# @param data {np.array} 在线训练数据
-	# @param label_index {int} label列的下标（默认为0）
+	# @param label_index {int} label列的下标
 	# @return {OS_ELM} 更新后的网络
 	def fit_train(self, data, label_index=0):
 		# 归一化数据
@@ -150,8 +156,8 @@ class OS_ELM(object):
 
 	# 计算训练的误差值
 	# @param data {np.array} 训练数据
-	# @param label_index {int} label列的下标（默认为0）
-	# @param text {string} 输出内容的附加文本（默认为模型id）
+	# @param label_index {int} label列的下标
+	# @param text {string} 输出内容的附加文本，默认为模型id）
 	# @return {float} 训练准确率
 	def error_calc(self, data, label_index=0, text=""):
 		# 附加文本默认为模型id
